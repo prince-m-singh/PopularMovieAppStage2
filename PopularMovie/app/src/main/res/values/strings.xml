@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">PopularMovie</string>
+
+    <string name="top_rated">Top Rated</string>
+
+    <string name="most_popular">Popular</string>
+
+    <string name="error_message">An error has occurred. Please try again after some time</string>
+
+    <string name="api_key">fec04a3c2a7e9636abec6390aea95829</string>
+
+    <string name="poster_url">http://image.tmdb.org/t/p/w185</string>
+
+    <string name="movie_queery_url"></string>
+
+    <string name="title_movie_details_display_message">Movie Details</string>
+
+    <string name="error_on_load">Sorry Something Went Wrong.Try again Later!</string>
+
+</resources>

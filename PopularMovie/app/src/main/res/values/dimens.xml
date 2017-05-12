@@ -1,0 +1,51 @@
+<resources>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">3dp</dimen>
+    <dimen name="activity_vertical_margin">3dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="error_textsize">20sp</dimen>
+    <dimen name="progressbar_dim">42dp</dimen>
+
+    <dimen name="title_marginend">64dp</dimen>
+
+    <dimen name="title_marginstart">48dp</dimen>
+
+    <dimen name="layout_margin_ll">15dp</dimen>
+    
+    
+    <dimen name="text_sz_verysmall">15sp</dimen>
+    <dimen name="text_sz_small">16sp</dimen>
+    <dimen name="text_sz_medium">20sp</dimen>
+    <dimen name="text_sz_large">56sp</dimen>
+    <dimen name="text_sz_extra_large">70sp</dimen>
+
+    <dimen name="margin_verysmall">5dp</dimen>
+    <dimen name="margin_small">10dp</dimen>
+    <dimen name="margin_medium">20dp</dimen>
+    <dimen name="margin_large">56dp</dimen>
+    <dimen name="margin_extra_large">70dp</dimen>
+
+
+    <dimen name="padding_verysmall">5dp</dimen>
+    <dimen name="padding_small">10dp</dimen>
+    <dimen name="padding_medium">16dp</dimen>
+    <dimen name="padding_large">56dp</dimen>
+    <dimen name="padding_extra_large">70dp</dimen>
+
+
+
+    <dimen name="layout_height_very_small">5dp</dimen>
+    <dimen name="layout_height_small">20dp</dimen>
+    <dimen name="layout_height_medium">50dp</dimen>
+    <dimen name="layout_height_large">100dp</dimen>
+    <dimen name="layout_height_very_large">150dp</dimen>
+
+    <dimen name="layout_width_very_small">5dp</dimen>
+    <dimen name="layout_width_small">20dp</dimen>
+    <dimen name="layout_width_medium">50dp</dimen>
+    <dimen name="layout_width_large">100dp</dimen>
+    <dimen name="layout_width_very_large">150dp</dimen>
+
+
+</resources>
