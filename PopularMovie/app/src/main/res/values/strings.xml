@@ -7,7 +7,7 @@
 
     <string name="error_message">An error has occurred. Please try again after some time</string>
 
-    <string name="api_key">fec04a3c2a7e9636abec6390aea95829</string>
+    <string name="api_key" translatable="false">fec04a3c2a7e9636abec6390aea95829</string>
 
     <string name="poster_url">http://image.tmdb.org/t/p/w185</string>
 
@@ -16,5 +16,37 @@
     <string name="title_movie_details_display_message">Movie Details</string>
 
     <string name="error_on_load">Sorry Something Went Wrong.Try again Later!</string>
+
+    <string name="reviews">Reviews</string>
+
+    <string name="videos">Videos</string>
+
+    <string name="photos">Photos</string>
+
+    <string name="ranking">User Rating</string>
+
+    <string name="duration">VoteCount</string>
+    <string name="story_line">Story Line</string>
+
+    <string name="genre">Genres</string>
+
+    <string name="settings">Preferences</string>
+
+    <string name="dialog_based_preferences">Movie Preferences</string>
+
+    <string name="popular_movies">Popular Movies</string>
+
+
+    <string name="highest_rated_movies">Highest Rated Movies</string>
+
+    <string name="favorite_movies">Favorite Movies</string>
+
+    <string name="upcoming_movies">Upcoming Movies</string>
+
+    <string name="sort_list_preference_title">Movie Type</string>
+
+    <string name="now_playing_movies">Now Playing</string>
+
+    <string name="release_date">Release Date</string>
 
 </resources>

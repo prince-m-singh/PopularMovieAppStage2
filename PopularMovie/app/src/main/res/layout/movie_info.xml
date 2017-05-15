@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorPrimaryLight">
+
+    <ImageView
+        android:id="@+id/imageViewMovie"
+        android:layout_width="120dp"
+        android:layout_height="180dp"
+        android:background="@drawable/shape_rectangle_fill_light"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginStart="0dp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewMoviDateOfRelease"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="MAY 14 2017"
+        android:layout_marginTop="2dp"
+        android:layout_marginStart="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/release_date_label"
+        android:layout_marginLeft="8dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        app:layout_constraintLeft_toLeftOf="@+id/release_date_label" />
+
+    <TextView
+        android:id="@+id/textViewVoteCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="1024"
+        android:layout_marginLeft="0dp"
+        app:layout_constraintLeft_toLeftOf="@+id/votecount_label"
+        android:layout_marginTop="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/votecount_label"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"/>
+
+    <TextView
+        android:id="@+id/textViewMovieRating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        tools:text="7.0 Rating"
+        android:layout_marginLeft="0dp"
+        app:layout_constraintLeft_toLeftOf="@+id/ranking_label"
+        android:layout_marginTop="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/ranking_label" />
+
+    <ImageView
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_collapseMode="pin"
+        app:srcCompat="@drawable/ic_star_off"
+        android:layout_marginStart="37dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="65dp"
+        app:layout_constraintLeft_toRightOf="@+id/imageViewMovie"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <TextView
+        android:id="@+id/release_date_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/release_date"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="16dp"
+        app:layout_constraintLeft_toRightOf="@+id/imageViewMovie"
+        android:layout_marginLeft="16dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+    <TextView
+        android:id="@+id/votecount_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/duration"
+        android:layout_marginTop="12dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        app:layout_constraintTop_toBottomOf="@+id/textViewMoviDateOfRelease"
+        android:layout_marginLeft="-16dp"
+        app:layout_constraintLeft_toLeftOf="@+id/textViewMoviDateOfRelease" />
+
+    <TextView
+        android:id="@+id/ranking_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ranking"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/textViewVoteCount"
+        android:layout_marginLeft="0dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        app:layout_constraintLeft_toLeftOf="@+id/textViewVoteCount" />
+
+    <!--<Button
+        android:id="@+id/btnAddAsFavorites"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Favorites"
+        app:layout_constraintBottom_toBottomOf="@+id/imageViewMovie"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="0dp"
+        app:layout_constraintLeft_toLeftOf="@+id/textViewMovieRating" />-->
+
+
+</android.support.constraint.ConstraintLayout>

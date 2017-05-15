@@ -50,6 +50,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private final String MOVIE_POSTER = "poster_path";
     private final String VOTE_AVERAGE = "vote_average";
     private final String PLOT_SYNOPSIS = "overview";
+    private final String MOVIE_ID="id";
+    private final String VOTE_COUNT="vote_count";
     private RecyclerView.LayoutManager layoutManager;
     int mScrollPosition;
 
@@ -157,17 +159,22 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     @Override
     public void onClick(JSONObject movieData) {
         try {
+            Log.e("Data",movieData.toString());
             String title = movieData.getString(TITLE);
             String poster = "" + movieData.getString(MOVIE_POSTER);
             String release_date = movieData.getString(RELEASE_DATE);
             String vote = movieData.getString(VOTE_AVERAGE);
             String plot = movieData.getString(PLOT_SYNOPSIS);
+            String id=movieData.getString(MOVIE_ID);
+            String voteCount=movieData.getString(VOTE_COUNT);
             Intent intent = new Intent(getApplicationContext(), MovieDetailActivity.class);
             intent.putExtra(TITLE, title);
             intent.putExtra(MOVIE_POSTER, poster);
             intent.putExtra(RELEASE_DATE, release_date);
             intent.putExtra(VOTE_AVERAGE, vote);
             intent.putExtra(PLOT_SYNOPSIS, plot);
+            intent.putExtra(MOVIE_ID,id);
+            intent.putExtra(VOTE_COUNT,voteCount);
             startActivity(intent);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -176,6 +183,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     }
 
+
+    /*Feteching Data*/
     public class FetchMovieDataTask extends AsyncTask<Integer, Void, String> {
         @Override
         protected String doInBackground(Integer... integers) {
