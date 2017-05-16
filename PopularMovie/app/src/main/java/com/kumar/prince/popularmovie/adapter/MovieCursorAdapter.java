@@ -8,42 +8,49 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.kumar.prince.popularmovie.MainActivity;
 import com.kumar.prince.popularmovie.R;
+import com.kumar.prince.popularmovie.utilities.MovieGeneralFabDataModal;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+
 /**
  * Created by princ on 14-04-2017.
  */
 
-public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapterViewHolder> {
+public class MovieCursorAdapter extends RecyclerView.Adapter<MovieCursorAdapter.MovieAdapterViewHolder> {
 
     private String[] posterURL;
     private JSONArray movieData;
     private Context context;
-    final private MovieAdapter.MovieAdapterOnClickHandler mClickHandler;
+    List<MovieGeneralFabDataModal> movieGeneralModals;
+    final private MovieCursorAdapter.MovieAdapterOnClickHandler mClickHandler;
 
-    public MovieAdapter(MovieAdapterOnClickHandler movieAdapterOnClickHandler) {
+    public MovieCursorAdapter(MovieCursorAdapter.MovieAdapterOnClickHandler movieAdapterOnClickHandler) {
 
         mClickHandler = movieAdapterOnClickHandler;
     }
 
+
+
     public interface MovieAdapterOnClickHandler {
-        void onClick(JSONObject movieData);
+        void onClick(MovieGeneralFabDataModal movieData);
     }
 
     @Override
-    public MovieAdapter.MovieAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MovieCursorAdapter.MovieAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         context = parent.getContext();
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_movieposter, parent, false);
         return new MovieAdapterViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(MovieAdapter.MovieAdapterViewHolder holder, int position) {
+    public void onBindViewHolder(MovieCursorAdapter.MovieAdapterViewHolder holder, int position) {
         Log.e(getClass().getName(),"Position "+position+"  posterURL[position]" +posterURL[position]);
         Picasso.with(context).load(posterURL[position]).into(holder.imageMoviePoster);
     }
@@ -61,9 +68,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
         notifyDataSetChanged();
     }
 
-    public void setMovieDataJSONArray(JSONArray movieData) {
-        this.movieData = movieData;
+    public void setMovieGeneralModals(List<MovieGeneralFabDataModal> movieData) {
+        this.movieGeneralModals = movieData;
     }
+
+
 
 
     public class MovieAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -80,11 +89,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
 
         @Override
         public void onClick(View view) {
-            try {
-                mClickHandler.onClick(movieData.getJSONObject(getAdapterPosition()));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            mClickHandler.onClick(movieGeneralModals.get(getAdapterPosition()));
 
         }
     }

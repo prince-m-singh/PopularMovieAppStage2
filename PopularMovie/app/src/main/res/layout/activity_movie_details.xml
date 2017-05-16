@@ -21,7 +21,7 @@
                 android:layout_marginTop="8dp"
                 android:fontFamily="sans-serif"
                 android:lineSpacingExtra="8sp"
-                android:text="MovieTitle"
+                android:text="@string/movie_name"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Caption"
                 android:textColor="@color/colorPrimary"

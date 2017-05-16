@@ -26,6 +26,13 @@
                 android:value=".MainActivity" />-->
 
         </activity>
+
+        <provider
+            android:name=".data.MovieDataProvider"
+            android:authorities="com.kumar.prince.popularmovie"
+            android:exported="false" />
+
     </application>
+
 
 </manifest>

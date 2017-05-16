@@ -11,4 +11,9 @@
         android:title="@string/top_rated"
         app:showAsAction="collapseActionView"
         android:orderInCategory="2"/>
+
+    <item android:id="@+id/action_favorite_movie"
+        android:title="@string/favorite_movie"
+        app:showAsAction="collapseActionView"
+        android:orderInCategory="3"/>
 </menu>

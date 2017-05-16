@@ -1,8 +1,10 @@
 package com.kumar.prince.popularmovie;
 
 import android.content.ActivityNotFoundException;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PersistableBundle;
@@ -15,6 +17,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.kumar.prince.popularmovie.data.MovieDataContract;
+import com.kumar.prince.popularmovie.databinding.ActivityMovieDetailsBinding;
 import com.kumar.prince.popularmovie.network.MovieAPI;
 import com.kumar.prince.popularmovie.network.NetworkAPI;
 import com.kumar.prince.popularmovie.utilities.review.MovieReview;
@@ -44,17 +48,19 @@ public class MovieDetailActivity extends AppCompatActivity {
     private final String AVERAGE_VOTE_MOVIE = "vote_average";
     private final String SYNOPSIS_OF_MOVIE = "overview";
     private final String MOVIE_ID = "id";
-    private final String VOTECOUNT="vote_count";
-    private TextView synopsisViewTv, averageVoteTv, movieReleaseDateTv, movieTitleTv, movieReviewTv,voteCountTv;
-    private ImageView movieImageView,fab;
-    private String title, release, poster, vote, plot, movieId,voteCount;
+    private final String VOTECOUNT = "vote_count";
+    private final String ORIGINAL_LANG="original_language";
+    private TextView synopsisViewTv, averageVoteTv, movieReleaseDateTv, movieTitleTv, movieReviewTv, voteCountTv;
+    private ImageView movieImageView, fab;
+    private String title, release, poster, vote, plot, movieId, voteCount,lang,movieImage,posterURL;
     private String shareYoutubeID;
     private LinearLayout linearLayout;
-
+    private ActivityMovieDetailsBinding mDetailBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //  mDetailBinding= DataBindingUtil.setContentView(this,R.layout.activity_movie_details);
         setContentView(R.layout.activity_movie_details);
         synopsisViewTv = (TextView) findViewById(R.id.textViewPlotSynossis);
         averageVoteTv = (TextView) findViewById(R.id.textViewMovieRating);
@@ -62,9 +68,9 @@ public class MovieDetailActivity extends AppCompatActivity {
         movieTitleTv = (TextView) findViewById(R.id.textViewMovieTitle);
         movieImageView = (ImageView) findViewById(R.id.imageViewMovie);
         movieReviewTv = (TextView) findViewById(R.id.textViewMovieReview);
-        linearLayout=(LinearLayout) findViewById(R.id.youtubelayout);
-        voteCountTv=(TextView) findViewById(R.id.textViewVoteCount);
-        fab=(ImageView) findViewById(R.id.fab);
+        linearLayout = (LinearLayout) findViewById(R.id.youtubelayout);
+        voteCountTv = (TextView) findViewById(R.id.textViewVoteCount);
+        fab = (ImageView) findViewById(R.id.fab);
 
         if (uiUpdate()) {
             Log.d("success", "success in updating UI");
@@ -75,8 +81,9 @@ public class MovieDetailActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(),"Fab add",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Fab add", Toast.LENGTH_SHORT).show();
                 fab.setImageResource(R.drawable.ic_star_on);
+                insertFavMovieData();
                 //mBinding.fab.setImageResource(R.drawable.ic_star_on);
             }
         });
@@ -109,8 +116,10 @@ public class MovieDetailActivity extends AppCompatActivity {
                 vote = intent.getStringExtra(AVERAGE_VOTE_MOVIE);
                 plot = intent.getStringExtra(SYNOPSIS_OF_MOVIE);
                 movieId = intent.getStringExtra(MOVIE_ID);
-                voteCount=intent.getStringExtra(VOTECOUNT);
-                poster = "http://image.tmdb.org/t/p/w500/" + poster;
+                voteCount = intent.getStringExtra(VOTECOUNT);
+                lang=intent.getStringExtra(ORIGINAL_LANG);
+                posterURL = "http://image.tmdb.org/t/p/w500/" + poster;
+
 
             } else
                 return false;
@@ -132,7 +141,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         getTrailer(linearLayout);
         getMovieReview(movieReviewTv);
         Picasso.with(this)
-                .load(poster)
+                .load(posterURL)
                 .into(movieImageView);
         return true;
     }
@@ -142,12 +151,12 @@ public class MovieDetailActivity extends AppCompatActivity {
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
         super.onSaveInstanceState(outState, outPersistentState);
-        if (title != null && release != null && plot != null && vote != null && poster != null) {
+        if (title != null && release != null && plot != null && vote != null && posterURL != null) {
             outState.putString(MOVIE_TITLE, title);
             outState.putString(MOVIE_RELEASE_DATE, release);
             outState.putString(SYNOPSIS_OF_MOVIE, plot);
             outState.putString(AVERAGE_VOTE_MOVIE, vote);
-            outState.putString(MOVIE_POSTER, poster);
+            outState.putString(MOVIE_POSTER, posterURL);
         }
     }
 
@@ -258,6 +267,42 @@ public class MovieDetailActivity extends AppCompatActivity {
                     Uri.parse("http://www.youtube.com/watch?v=" + id));
             startActivity(intent);
         }
+    }
+
+
+    private void insertFavMovieData() {
+        ContentValues contentValues = new ContentValues();
+        // Put the task description and selected mPriority into the ContentValues
+        contentValues.put(MovieDataContract.TableFavorites._ID, movieId);
+        contentValues.put(MovieDataContract.TableFavorites.COL_TITLE, title);
+        contentValues.put(MovieDataContract.TableFavorites.COL_ORIGINAL_LANGUAGE, lang);
+        contentValues.put(MovieDataContract.TableFavorites.COL_RELEASE_DATE, release);
+
+        contentValues.put(MovieDataContract.TableFavorites.COL_POSTER_PATH, poster);
+        contentValues.put(MovieDataContract.TableFavorites.COL_VOTE_AVERAGE, vote);
+       // contentValues.put(MovieDataContract.TableFavorites.COL_THUMBNAIL, input);
+        contentValues.put(MovieDataContract.TableFavorites.COL_PEOPLE, voteCount);
+        contentValues.put(MovieDataContract.TableFavorites.COL_MOVIE_OVERVIEW, plot);
+
+        Uri uri = getContentResolver().insert(MovieDataContract.CONTENT_URI, contentValues);
+
+        if(uri != null) {
+            Toast.makeText(getBaseContext(), uri.toString(), Toast.LENGTH_LONG).show();
+        }
+     /*   title = intent.getStringExtra(MOVIE_TITLE);
+        release = intent.getStringExtra(MOVIE_RELEASE_DATE);
+        poster = intent.getStringExtra(MOVIE_POSTER);
+        vote = intent.getStringExtra(AVERAGE_VOTE_MOVIE);
+        plot = intent.getStringExtra(SYNOPSIS_OF_MOVIE);
+        movieId = intent.getStringExtra(MOVIE_ID);
+        voteCount = intent.getStringExtra(VOTECOUNT);
+        poster = "http://image.tmdb.org/t/p/w500/" + poster;
+*/
+    }
+
+    private boolean dataSearch(){
+
+        return true;
     }
 
 
