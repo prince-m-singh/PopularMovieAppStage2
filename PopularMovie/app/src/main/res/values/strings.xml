@@ -9,9 +9,9 @@
 
     <string name="error_message">An error has occurred. Please try again after some time</string>
 
-    <string name="api_key" translatable="false">fec04a3c2a7e9636abec6390aea95829</string>
+    <string name="api_key" translatable="false"></string>
 
-    <string name="poster_url">http://image.tmdb.org/t/p/w185</string>
+    <string name="poster_url" translatable="false">http://image.tmdb.org/t/p/w185</string>
 
     <string name="fab_data_not_avilable">Sorry, You Don\'t Have Any Favourite Movie </string>
 
