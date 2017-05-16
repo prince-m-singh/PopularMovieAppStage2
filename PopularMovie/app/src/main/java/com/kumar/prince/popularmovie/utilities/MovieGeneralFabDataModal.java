@@ -25,10 +25,9 @@ public class MovieGeneralFabDataModal implements Serializable {
         this.mPeople = mPeople;
 
 
-
-
     }
-    public String getmPoster(){
+
+    public String getmPoster() {
         return this.mPoster;
     }
 
@@ -64,6 +63,7 @@ public class MovieGeneralFabDataModal implements Serializable {
     public String getmPeople() {
         return this.mPeople;
     }
+
     public String getmVote() {
         return this.mVote;
     }

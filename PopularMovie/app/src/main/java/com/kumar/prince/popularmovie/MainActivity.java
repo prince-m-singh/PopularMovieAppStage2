@@ -40,7 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler
-        ,LoaderManager.LoaderCallbacks<Cursor>,MovieCursorAdapter.MovieAdapterOnClickHandler {
+        , LoaderManager.LoaderCallbacks<Cursor>, MovieCursorAdapter.MovieAdapterOnClickHandler {
     private final String TAG = getClass().getName();
     private String[] imgUrl;
     private GridView mGridView;
@@ -66,12 +66,15 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private final String MOVIE_POSTER = "poster_path";
     private final String VOTE_AVERAGE = "vote_average";
     private final String PLOT_SYNOPSIS = "overview";
-    private final String MOVIE_ID="id";
-    private final String VOTE_COUNT="vote_count";
-    private final String ORIGINAL_LANG="original_language";
+    private final String MOVIE_ID = "id";
+    private final String VOTE_COUNT = "vote_count";
+    private final String ORIGINAL_LANG = "original_language";
+    private final String FAVOURITE_MOVIE = "favouritemovie";
     private RecyclerView.LayoutManager layoutManager;
+    private List<MovieGeneralFabDataModal> movieGeneralFabDataModals;
     int mScrollPosition;
-    boolean fabMovie=false;
+    boolean fabMovie = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
 
-        movieCursorAdapter=new MovieCursorAdapter(this);
+        movieCursorAdapter = new MovieCursorAdapter(this);
         movieAdapter = new MovieAdapter(this);
         //mRecyclerView.setAdapter(movieAdapter);
         mErrorMessageDisplay = (TextView) findViewById(R.id.tv_error_message_display);
@@ -124,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         super.onResume();
 
         if (fabMovie)
-        getSupportLoaderManager().initLoader(TASK_LOADER_ID, null, this);
+            getSupportLoaderManager().initLoader(TASK_LOADER_ID, null, this);
 
     }
 
@@ -132,14 +135,15 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         mRecyclerView.setAdapter(movieAdapter);
         showMovieDataView();
         new FetchMovieDataTask().execute(urlType);
+        getSupportLoaderManager().initLoader(TASK_LOADER_ID, null, this);
 
 
     }
 
-    private void loadFavMoviedata(RecyclerView mRecyclerView){
+    private void loadFavMoviedata(RecyclerView mRecyclerView) {
         mRecyclerView.setAdapter(movieCursorAdapter);
         showMovieDataView();
-        getSupportLoaderManager().initLoader(TASK_LOADER_ID, null, this);
+        getSupportLoaderManager().restartLoader(TASK_LOADER_ID, null, this);
     }
 
     /*Create Menu for selecting for popular movie or High Rating movie*/
@@ -164,9 +168,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             loadMovieData(mRecyclerView);
             return true;
         } else if (itemThatWasClickedId == R.id.action_favorite_movie) {
-            fabMovie=true;
+            fabMovie = true;
             movieAdapter.setMovierURLData(null);
-           // movieCursorAdapter.setMovierURLData(null);
+            movieCursorAdapter.setMovierURLData(null);
             loadFavMoviedata(mRecyclerView);
             return true;
         }
@@ -194,24 +198,32 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     @Override
     public void onClick(JSONObject movieData) {
         try {
-            Log.e("Data",movieData.toString());
+            Log.e("Data", movieData.toString());
             String title = movieData.getString(TITLE);
             String poster = "" + movieData.getString(MOVIE_POSTER);
             String release_date = movieData.getString(RELEASE_DATE);
             String vote = movieData.getString(VOTE_AVERAGE);
             String plot = movieData.getString(PLOT_SYNOPSIS);
-            String id=movieData.getString(MOVIE_ID);
-            String voteCount=movieData.getString(VOTE_COUNT);
-            String lang=movieData.getString(ORIGINAL_LANG);
+            String id = movieData.getString(MOVIE_ID);
+            String voteCount = movieData.getString(VOTE_COUNT);
+            String lang = movieData.getString(ORIGINAL_LANG);
+            boolean favMovie = false;
+            if (containsFabMovie(movieGeneralFabDataModals, id)) {
+                favMovie = true;
+            } else {
+                favMovie = false;
+            }
+
             Intent intent = new Intent(getApplicationContext(), MovieDetailActivity.class);
             intent.putExtra(TITLE, title);
             intent.putExtra(MOVIE_POSTER, poster);
             intent.putExtra(RELEASE_DATE, release_date);
             intent.putExtra(VOTE_AVERAGE, vote);
             intent.putExtra(PLOT_SYNOPSIS, plot);
-            intent.putExtra(MOVIE_ID,id);
-            intent.putExtra(VOTE_COUNT,voteCount);
-            intent.putExtra(ORIGINAL_LANG,lang);
+            intent.putExtra(MOVIE_ID, id);
+            intent.putExtra(VOTE_COUNT, voteCount);
+            intent.putExtra(ORIGINAL_LANG, lang);
+            intent.putExtra(FAVOURITE_MOVIE, favMovie);
             startActivity(intent);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -271,11 +283,15 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        getAllMovies(cursor);
+        movieGeneralFabDataModals = getAllMovies(cursor);
+
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
+
+           // notifyDataSetChanged();
+
 
     }
 
@@ -286,11 +302,11 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         String title = movieData.getTitle();
         String poster = "" + movieData.getmPoster();
         String release_date = movieData.getmReleaseDate();
-        Log.i(getClass().getName(),release_date);
+        Log.i(getClass().getName(), release_date);
         String vote = movieData.getmVote();
         String plot = movieData.getmOverview();
-        String id=movieData.getmId();
-        String voteCount=movieData.getmPeople();
+        String id = movieData.getmId();
+        String voteCount = movieData.getmPeople();
         //String lang=movieData.getString(ORIGINAL_LANG);
         Intent intent = new Intent(getApplicationContext(), MovieDetailActivity.class);
         intent.putExtra(TITLE, title);
@@ -298,8 +314,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         intent.putExtra(RELEASE_DATE, release_date);
         intent.putExtra(VOTE_AVERAGE, vote);
         intent.putExtra(PLOT_SYNOPSIS, plot);
-        intent.putExtra(MOVIE_ID,id);
-        intent.putExtra(VOTE_COUNT,voteCount);
+        intent.putExtra(MOVIE_ID, id);
+        intent.putExtra(VOTE_COUNT, voteCount);
+        intent.putExtra(FAVOURITE_MOVIE, true);
         //intent.putExtra(ORIGINAL_LANG,lang);
         startActivity(intent);
 
@@ -361,19 +378,21 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                 }
                 movieAdapter.setMovierURLData(imgUrl);
                 movieAdapter.setMovieDataJSONArray(movieDetails);
+
             } else {
                 showErrorMessage();
             }
         }
     }
-    public List<MovieGeneralFabDataModal> getAllMovies( Cursor cursor) {
-        imgUrl=new String[cursor.getCount()];
+
+    public List<MovieGeneralFabDataModal> getAllMovies(Cursor cursor) {
+        imgUrl = new String[cursor.getCount()];
         List<MovieGeneralFabDataModal> movieList = new ArrayList<>();
 
         if (cursor == null) {
             return null;
         }
-        int totalData= cursor.getCount();
+        int totalData = cursor.getCount();
         int movieIdIndex = cursor.getColumnIndex(MovieDataContract.TableFavorites.COL_ID);
         int titleIndex = cursor.getColumnIndex(MovieDataContract.TableFavorites.COL_TITLE);
         int posterIndex = cursor.getColumnIndex(MovieDataContract.TableFavorites.COL_POSTER_PATH);
@@ -382,16 +401,16 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         int originalLangIndex = cursor.getColumnIndex(MovieDataContract.TableFavorites.COL_ORIGINAL_LANGUAGE);
         int peopleIndex = cursor.getColumnIndex(MovieDataContract.TableFavorites.COL_PEOPLE);
         int movieOverViewIndex = cursor.getColumnIndex(MovieDataContract.TableFavorites.COL_MOVIE_OVERVIEW);
-        int i=0;
-        Log.e("Index","totalData" +totalData + "movieIdIndex "
-                +movieIdIndex + "posterIndex "+posterIndex + "releaseDateIndex "+releaseDateIndex + "movieOverViewIndex "+movieOverViewIndex);
+        int i = 0;
+        Log.e("Index", "totalData" + totalData + "movieIdIndex "
+                + movieIdIndex + "posterIndex " + posterIndex + "releaseDateIndex " + releaseDateIndex + "movieOverViewIndex " + movieOverViewIndex);
         if (cursor.moveToFirst()) {
             do {
                 MovieGeneralFabDataModal movie = new MovieGeneralFabDataModal(cursor.getString(titleIndex), cursor.getString(posterIndex),
                         cursor.getString(voteIndex), cursor.getString(movieIdIndex), cursor.getString(peopleIndex),
                         cursor.getString(releaseDateIndex), cursor.getString(movieOverViewIndex));
 
-                Log.e("Movie",context.getResources().getString(R.string.poster_url)+cursor.getString(posterIndex));
+                Log.e("Movie", context.getResources().getString(R.string.poster_url) + cursor.getString(posterIndex));
                 movieList.add(movie);
                 imgUrl[i] = context.getResources().getString(R.string.poster_url) + cursor.getString(posterIndex);
                 i++;
@@ -410,4 +429,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     }
 
 
+    private static boolean containsFabMovie(final List<MovieGeneralFabDataModal> movie, final String search) {
+        for (final MovieGeneralFabDataModal moviedata : movie) {
+            if (moviedata.getmId().equals(search)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

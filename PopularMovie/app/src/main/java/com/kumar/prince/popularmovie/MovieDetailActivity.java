@@ -49,10 +49,12 @@ public class MovieDetailActivity extends AppCompatActivity {
     private final String SYNOPSIS_OF_MOVIE = "overview";
     private final String MOVIE_ID = "id";
     private final String VOTECOUNT = "vote_count";
-    private final String ORIGINAL_LANG="original_language";
+    private final String ORIGINAL_LANG = "original_language";
+    private final String FAVOURITE_MOVIE = "favouritemovie";
     private TextView synopsisViewTv, averageVoteTv, movieReleaseDateTv, movieTitleTv, movieReviewTv, voteCountTv;
     private ImageView movieImageView, fab;
-    private String title, release, poster, vote, plot, movieId, voteCount,lang,movieImage,posterURL;
+    private String title, release, poster, vote, plot, movieId, voteCount, lang, movieImage, posterURL;
+    private boolean favMovie = false;
     private String shareYoutubeID;
     private LinearLayout linearLayout;
     private ActivityMovieDetailsBinding mDetailBinding;
@@ -77,13 +79,18 @@ public class MovieDetailActivity extends AppCompatActivity {
         } else
             showErrorDialog();
 
-
+        if (favMovie)
+            fab.setImageResource(R.drawable.ic_star_on);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getApplicationContext(), "Fab add", Toast.LENGTH_SHORT).show();
                 fab.setImageResource(R.drawable.ic_star_on);
-                insertFavMovieData();
+                if (!favMovie){
+                    favMovie=true;
+                    insertFavMovieData();
+                }
+
                 //mBinding.fab.setImageResource(R.drawable.ic_star_on);
             }
         });
@@ -117,7 +124,9 @@ public class MovieDetailActivity extends AppCompatActivity {
                 plot = intent.getStringExtra(SYNOPSIS_OF_MOVIE);
                 movieId = intent.getStringExtra(MOVIE_ID);
                 voteCount = intent.getStringExtra(VOTECOUNT);
-                lang=intent.getStringExtra(ORIGINAL_LANG);
+                favMovie = intent.getBooleanExtra(FAVOURITE_MOVIE, false);
+                lang = intent.getStringExtra(ORIGINAL_LANG);
+
                 posterURL = "http://image.tmdb.org/t/p/w500/" + poster;
 
 
@@ -280,13 +289,13 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         contentValues.put(MovieDataContract.TableFavorites.COL_POSTER_PATH, poster);
         contentValues.put(MovieDataContract.TableFavorites.COL_VOTE_AVERAGE, vote);
-       // contentValues.put(MovieDataContract.TableFavorites.COL_THUMBNAIL, input);
+        // contentValues.put(MovieDataContract.TableFavorites.COL_THUMBNAIL, input);
         contentValues.put(MovieDataContract.TableFavorites.COL_PEOPLE, voteCount);
         contentValues.put(MovieDataContract.TableFavorites.COL_MOVIE_OVERVIEW, plot);
 
         Uri uri = getContentResolver().insert(MovieDataContract.CONTENT_URI, contentValues);
 
-        if(uri != null) {
+        if (uri != null) {
             Toast.makeText(getBaseContext(), uri.toString(), Toast.LENGTH_LONG).show();
         }
      /*   title = intent.getStringExtra(MOVIE_TITLE);
@@ -300,7 +309,7 @@ public class MovieDetailActivity extends AppCompatActivity {
 */
     }
 
-    private boolean dataSearch(){
+    private boolean dataSearch() {
 
         return true;
     }

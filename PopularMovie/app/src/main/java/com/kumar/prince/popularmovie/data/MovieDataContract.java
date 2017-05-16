@@ -19,7 +19,6 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 
 
-
 /**
  * Defines table and column names for the  favorites movie database.
  */
@@ -34,8 +33,6 @@ public class MovieDataContract {
             .appendPath(TABLE_FAVORITES)
             .build();
 
-    // To prevent someone from accidentally instantiating the contract class,
-    // give it an empty constructor.
     private MovieDataContract() {
     }
 

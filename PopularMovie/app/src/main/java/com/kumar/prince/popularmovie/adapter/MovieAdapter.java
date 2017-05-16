@@ -15,9 +15,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- * Created by princ on 14-04-2017.
- */
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapterViewHolder> {
 
@@ -44,7 +41,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
 
     @Override
     public void onBindViewHolder(MovieAdapter.MovieAdapterViewHolder holder, int position) {
-        Log.e(getClass().getName(),"Position "+position+"  posterURL[position]" +posterURL[position]);
+        Log.e(getClass().getName(), "Position " + position + "  posterURL[position]" + posterURL[position]);
         Picasso.with(context).load(posterURL[position]).into(holder.imageMoviePoster);
     }
 

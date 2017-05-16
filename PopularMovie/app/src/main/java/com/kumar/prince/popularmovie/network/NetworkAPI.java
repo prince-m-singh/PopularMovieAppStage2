@@ -6,7 +6,7 @@ import retrofit.RestAdapter;
 import retrofit.client.OkClient;
 
 /**
- * Created by S.Shivasurya on 1/1/2016 - androidStudio.
+ * Created by princ on 15/5/2017 - androidStudio.
  */
 public class NetworkAPI {
     public static final String API_BASE_URL = "http://api.themoviedb.org";

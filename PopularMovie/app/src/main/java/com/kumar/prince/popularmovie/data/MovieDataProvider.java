@@ -27,7 +27,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-public class MovieDataProvider extends ContentProvider  {
+public class MovieDataProvider extends ContentProvider {
 
     private static final String TAG = MovieDataProvider.class.getSimpleName();
 

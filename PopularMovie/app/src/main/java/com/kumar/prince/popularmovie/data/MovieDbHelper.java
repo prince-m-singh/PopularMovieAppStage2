@@ -20,11 +20,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 
-
 /**
  * Manages a local database for weather data.
  */
-public class MovieDbHelper  extends SQLiteOpenHelper {
+public class MovieDbHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "Favorites.db";
     private static final int DB_VERSION = 1;

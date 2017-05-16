@@ -7,21 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
-import com.kumar.prince.popularmovie.MainActivity;
 import com.kumar.prince.popularmovie.R;
 import com.kumar.prince.popularmovie.utilities.MovieGeneralFabDataModal;
 import com.squareup.picasso.Picasso;
-
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.List;
-
-/**
- * Created by princ on 14-04-2017.
- */
 
 public class MovieCursorAdapter extends RecyclerView.Adapter<MovieCursorAdapter.MovieAdapterViewHolder> {
 
@@ -32,10 +22,8 @@ public class MovieCursorAdapter extends RecyclerView.Adapter<MovieCursorAdapter.
     final private MovieCursorAdapter.MovieAdapterOnClickHandler mClickHandler;
 
     public MovieCursorAdapter(MovieCursorAdapter.MovieAdapterOnClickHandler movieAdapterOnClickHandler) {
-
         mClickHandler = movieAdapterOnClickHandler;
     }
-
 
 
     public interface MovieAdapterOnClickHandler {
@@ -51,7 +39,6 @@ public class MovieCursorAdapter extends RecyclerView.Adapter<MovieCursorAdapter.
 
     @Override
     public void onBindViewHolder(MovieCursorAdapter.MovieAdapterViewHolder holder, int position) {
-        Log.e(getClass().getName(),"Position "+position+"  posterURL[position]" +posterURL[position]);
         Picasso.with(context).load(posterURL[position]).into(holder.imageMoviePoster);
     }
 
@@ -73,15 +60,12 @@ public class MovieCursorAdapter extends RecyclerView.Adapter<MovieCursorAdapter.
     }
 
 
-
-
     public class MovieAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public final ImageView imageMoviePoster;
 
         public MovieAdapterViewHolder(View itemView) {
 
             super(itemView);
-            Log.e("TAG", " MovieAdapterViewHolder" + posterURL.toString());
             imageMoviePoster = (ImageView) itemView.findViewById(R.id.imgmovieposter);
             itemView.setOnClickListener(this);
         }
