@@ -1,18 +1,3 @@
-/*
- * Copyright (C) 2015 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.kumar.prince.popularmovie.data;
 
 import android.content.ContentProvider;
@@ -31,7 +16,7 @@ public class MovieDataProvider extends ContentProvider {
 
     private static final String TAG = MovieDataProvider.class.getSimpleName();
 
-    private static final int FAVORITES = 100; // can be used later if we are providing all favorites
+    private static final int FAVORITES = 100;
     private static final int FAVORITES_WITH_ID = 101;
     private static final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
@@ -77,10 +62,6 @@ public class MovieDataProvider extends ContentProvider {
                         null);
                 break;
             case FAVORITES_WITH_ID:
-
-                // selection and args
-                // uri
-
                 final int INDEX_OF_ID_TOKEN = 1;
                 String id = uri.getPathSegments().get(INDEX_OF_ID_TOKEN);
                 String _selection = "_id=?";
@@ -180,14 +161,9 @@ public class MovieDataProvider extends ContentProvider {
                 throw new UnsupportedOperationException("Unknown URI : " + uri);
         }
 
-        // notify change on id
         ContentResolver resolver = getContext().getContentResolver();
         if (resolver != null) {
             resolver.notifyChange(uri, null);
-//            if (match == FAVORITES_WITH_ID) {
-//                // in case of uri with id, notifying the main uri too
-//                resolver.notifyChange(FavoritesPersistenceContract.CONTENT_URI, null);
-//            }
         }
         return noOfDeletedRows;
     }

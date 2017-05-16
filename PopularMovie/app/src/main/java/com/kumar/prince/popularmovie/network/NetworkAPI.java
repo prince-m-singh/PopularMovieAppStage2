@@ -5,9 +5,7 @@ import com.squareup.okhttp.OkHttpClient;
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
 
-/**
- * Created by princ on 15/5/2017 - androidStudio.
- */
+
 public class NetworkAPI {
     public static final String API_BASE_URL = "http://api.themoviedb.org";
 

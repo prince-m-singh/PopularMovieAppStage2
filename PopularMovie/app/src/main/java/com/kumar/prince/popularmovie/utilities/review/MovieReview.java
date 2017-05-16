@@ -1,8 +1,5 @@
 package com.kumar.prince.popularmovie.utilities.review;
 
-/**
- * Created by princ on 14-05-2017.
- */
 
 public class MovieReview {
 

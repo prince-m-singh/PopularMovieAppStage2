@@ -1,8 +1,5 @@
 package com.kumar.prince.popularmovie.widget;
 
-/**
- * Created by princ on 15-04-2017.
- */
 
 /*
 * This class help image  in square format when the movie details load

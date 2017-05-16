@@ -3,19 +3,13 @@ package com.kumar.prince.popularmovie.network;
 import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
-
 import com.kumar.prince.popularmovie.R;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Scanner;
-
-/**
- * Created by princ on 14-04-2017.
- */
 
 public class NetworkUtils {
 

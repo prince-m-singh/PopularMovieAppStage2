@@ -13,6 +13,8 @@
 
     <string name="poster_url">http://image.tmdb.org/t/p/w185</string>
 
+    <string name="fab_data_not_avilable">Sorry, You Don\'t Have Any Favourite Movie </string>
+
     <string name="movie_queery_url"></string>
 
     <string name="title_movie_details_display_message">Movie Details</string>

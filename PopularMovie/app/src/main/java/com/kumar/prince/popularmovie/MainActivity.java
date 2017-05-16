@@ -23,6 +23,7 @@ import android.view.View;
 import android.widget.GridView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.kumar.prince.popularmovie.adapter.MovieCursorAdapter;
 import com.kumar.prince.popularmovie.adapter.MovieAdapter;
@@ -102,9 +103,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     @Override
     protected void onPause() {
         super.onPause();
-     /*   mBundleRecyclerViewState = new Bundle();
-        Parcelable listState = mRecyclerView.getLayoutManager().onSaveInstanceState();
-        mBundleRecyclerViewState.putParcelable(KEY_RECYCLER_STATE, listState);*/
     }
 
     @Override
@@ -127,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         super.onResume();
 
         if (fabMovie)
-            getSupportLoaderManager().initLoader(TASK_LOADER_ID, null, this);
+            getSupportLoaderManager().restartLoader(TASK_LOADER_ID, null, this);
 
     }
 
@@ -307,7 +305,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         String plot = movieData.getmOverview();
         String id = movieData.getmId();
         String voteCount = movieData.getmPeople();
-        //String lang=movieData.getString(ORIGINAL_LANG);
         Intent intent = new Intent(getApplicationContext(), MovieDetailActivity.class);
         intent.putExtra(TITLE, title);
         intent.putExtra(MOVIE_POSTER, poster);
@@ -317,7 +314,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         intent.putExtra(MOVIE_ID, id);
         intent.putExtra(VOTE_COUNT, voteCount);
         intent.putExtra(FAVOURITE_MOVIE, true);
-        //intent.putExtra(ORIGINAL_LANG,lang);
         startActivity(intent);
 
     }
@@ -393,6 +389,10 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             return null;
         }
         int totalData = cursor.getCount();
+        if (totalData==0){
+            if (fabMovie)
+                Toast.makeText(context,getResources().getString(R.string.fab_data_not_avilable),Toast.LENGTH_LONG).show();
+        }
         int movieIdIndex = cursor.getColumnIndex(MovieDataContract.TableFavorites.COL_ID);
         int titleIndex = cursor.getColumnIndex(MovieDataContract.TableFavorites.COL_TITLE);
         int posterIndex = cursor.getColumnIndex(MovieDataContract.TableFavorites.COL_POSTER_PATH);
@@ -402,8 +402,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         int peopleIndex = cursor.getColumnIndex(MovieDataContract.TableFavorites.COL_PEOPLE);
         int movieOverViewIndex = cursor.getColumnIndex(MovieDataContract.TableFavorites.COL_MOVIE_OVERVIEW);
         int i = 0;
-        Log.e("Index", "totalData" + totalData + "movieIdIndex "
-                + movieIdIndex + "posterIndex " + posterIndex + "releaseDateIndex " + releaseDateIndex + "movieOverViewIndex " + movieOverViewIndex);
         if (cursor.moveToFirst()) {
             do {
                 MovieGeneralFabDataModal movie = new MovieGeneralFabDataModal(cursor.getString(titleIndex), cursor.getString(posterIndex),
@@ -423,8 +421,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         } else {
             showErrorMessage();
         }
-
-
         return movieList;
     }
 

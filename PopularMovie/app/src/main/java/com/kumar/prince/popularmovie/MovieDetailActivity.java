@@ -36,11 +36,6 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-/**
- * Created by princ on 15-04-2017.
- */
-
-/*This class used for Movie details Activity*/
 public class MovieDetailActivity extends AppCompatActivity {
     private final String MOVIE_TITLE = "title";
     private final String MOVIE_RELEASE_DATE = "release_date";
@@ -55,7 +50,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     private ImageView movieImageView, fab;
     private String title, release, poster, vote, plot, movieId, voteCount, lang, movieImage, posterURL;
     private boolean favMovie = false;
-    private String shareYoutubeID;
+
     private LinearLayout linearLayout;
     private ActivityMovieDetailsBinding mDetailBinding;
 
@@ -75,7 +70,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         fab = (ImageView) findViewById(R.id.fab);
 
         if (uiUpdate()) {
-            Log.d("success", "success in updating UI");
+
         } else
             showErrorDialog();
 
@@ -205,7 +200,6 @@ public class MovieDetailActivity extends AppCompatActivity {
                 youtubeViewHolder.setPadding(5, 5, 5, 0);
                 MovieYoutubeVideoResultsHolder[] trailer = movieYoutubeVideo.getResults();
                 if (trailer.length > 0) {
-                    shareYoutubeID = trailer[0].getKey();
                     for (final MovieYoutubeVideoResultsHolder obj : trailer) {
                         String url = generateYoutubeThumbnailURL(obj.getKey());
                         ImageView myImage = new ImageView(getApplicationContext());

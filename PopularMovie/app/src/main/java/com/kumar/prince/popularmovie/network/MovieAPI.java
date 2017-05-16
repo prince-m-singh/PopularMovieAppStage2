@@ -1,8 +1,5 @@
 package com.kumar.prince.popularmovie.network;
 
-/**
- * Created by princ on 14-05-2017.
- */
 
 import com.kumar.prince.popularmovie.utilities.review.MovieReview;
 import com.kumar.prince.popularmovie.utilities.youtube.MovieYoutubeVideo;
@@ -12,9 +9,6 @@ import retrofit.http.GET;
 import retrofit.http.Path;
 import retrofit.http.Query;
 
-/**
- * Created by princ on 14-05-2017.
- */
 public interface MovieAPI {
 
     @GET("/3/movie/{id}/reviews")
