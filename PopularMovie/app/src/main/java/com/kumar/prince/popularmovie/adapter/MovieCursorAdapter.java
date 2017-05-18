@@ -11,9 +11,11 @@ import com.kumar.prince.popularmovie.R;
 import com.kumar.prince.popularmovie.utilities.MovieGeneralFabDataModal;
 import com.squareup.picasso.Picasso;
 import org.json.JSONArray;
+
+import java.io.Serializable;
 import java.util.List;
 
-public class MovieCursorAdapter extends RecyclerView.Adapter<MovieCursorAdapter.MovieAdapterViewHolder> {
+public class MovieCursorAdapter extends RecyclerView.Adapter<MovieCursorAdapter.MovieAdapterViewHolder> implements Serializable {
 
     private String[] posterURL;
     private JSONArray movieData;

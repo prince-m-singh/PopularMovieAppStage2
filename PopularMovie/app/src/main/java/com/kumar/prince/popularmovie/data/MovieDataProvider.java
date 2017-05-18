@@ -79,8 +79,6 @@ public class MovieDataProvider extends ContentProvider {
             default:
                 throw new UnsupportedOperationException("Unknown URI : " + uri);
         }
-
-        // notification
         ContentResolver resolver = getContext().getContentResolver();
         if (rtCursor != null && resolver != null) {
             rtCursor.setNotificationUri(resolver, uri);
@@ -98,12 +96,8 @@ public class MovieDataProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
-        // get database access
         final SQLiteDatabase db = mFavoritesDBHelper.getWritableDatabase();
-
-        // Match URI
         int match = uriMatcher.match(uri);
-
         Uri returnUri;
         switch (match) {
             case FAVORITES:

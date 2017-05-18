@@ -41,7 +41,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
 
     @Override
     public void onBindViewHolder(MovieAdapter.MovieAdapterViewHolder holder, int position) {
-        Log.e(getClass().getName(), "Position " + position + "  posterURL[position]" + posterURL[position]);
         Picasso.with(context).load(posterURL[position]).into(holder.imageMoviePoster);
     }
 
@@ -69,7 +68,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
         public MovieAdapterViewHolder(View itemView) {
 
             super(itemView);
-            Log.e("TAG", " MovieAdapterViewHolder" + posterURL.toString());
             imageMoviePoster = (ImageView) itemView.findViewById(R.id.imgmovieposter);
             itemView.setOnClickListener(this);
         }

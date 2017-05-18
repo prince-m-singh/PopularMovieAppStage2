@@ -57,7 +57,6 @@ public class MovieDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //  mDetailBinding= DataBindingUtil.setContentView(this,R.layout.activity_movie_details);
         setContentView(R.layout.activity_movie_details);
         synopsisViewTv = (TextView) findViewById(R.id.textViewPlotSynossis);
         averageVoteTv = (TextView) findViewById(R.id.textViewMovieRating);
@@ -81,12 +80,10 @@ public class MovieDetailActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Toast.makeText(getApplicationContext(), "Fab add", Toast.LENGTH_SHORT).show();
                 fab.setImageResource(R.drawable.ic_star_on);
-                if (!favMovie){
-                    favMovie=true;
+                if (!favMovie) {
+                    favMovie = true;
                     insertFavMovieData();
                 }
-
-                //mBinding.fab.setImageResource(R.drawable.ic_star_on);
             }
         });
     }
@@ -184,7 +181,6 @@ public class MovieDetailActivity extends AppCompatActivity {
             @Override
             public void failure(RetrofitError error) {
                 Log.d("error", error.toString());
-                //movieReviewTv.setText("Sorry! Check Back Latter! Network Error!");
                 ((TextView) review).setText("Sorry! Check Back Latter! Network Error!");
             }
         });
@@ -292,21 +288,5 @@ public class MovieDetailActivity extends AppCompatActivity {
         if (uri != null) {
             Toast.makeText(getBaseContext(), uri.toString(), Toast.LENGTH_LONG).show();
         }
-     /*   title = intent.getStringExtra(MOVIE_TITLE);
-        release = intent.getStringExtra(MOVIE_RELEASE_DATE);
-        poster = intent.getStringExtra(MOVIE_POSTER);
-        vote = intent.getStringExtra(AVERAGE_VOTE_MOVIE);
-        plot = intent.getStringExtra(SYNOPSIS_OF_MOVIE);
-        movieId = intent.getStringExtra(MOVIE_ID);
-        voteCount = intent.getStringExtra(VOTECOUNT);
-        poster = "http://image.tmdb.org/t/p/w500/" + poster;
-*/
     }
-
-    private boolean dataSearch() {
-
-        return true;
-    }
-
-
 }

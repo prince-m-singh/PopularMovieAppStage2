@@ -29,6 +29,7 @@ import com.kumar.prince.popularmovie.adapter.MovieCursorAdapter;
 import com.kumar.prince.popularmovie.adapter.MovieAdapter;
 import com.kumar.prince.popularmovie.data.MovieDataContract;
 import com.kumar.prince.popularmovie.network.NetworkUtils;
+import com.kumar.prince.popularmovie.utilities.MovieData;
 import com.kumar.prince.popularmovie.utilities.MovieGeneralFabDataModal;
 
 import org.json.JSONArray;
@@ -37,6 +38,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,9 +48,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private String[] imgUrl;
     private GridView mGridView;
     private static final int TASK_LOADER_ID = 0;
-
     // Member variables for the adapter and RecyclerView
-
+    private Parcelable recyclerViewState;
     /*Menu option where user can change from Toprated movie to popular movie and vise versa */
     private Menu mMenu;
     private TextView mErrorMessageDisplay;
@@ -71,16 +72,23 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private final String VOTE_COUNT = "vote_count";
     private final String ORIGINAL_LANG = "original_language";
     private final String FAVOURITE_MOVIE = "favouritemovie";
+    private final String SAVED_RECYCLER_VIEW_STATUS_ID = "saveInstancePosition";
+    private final String SAVED_MENU_OPTION="selectedMenuOption";
     private RecyclerView.LayoutManager layoutManager;
     private List<MovieGeneralFabDataModal> movieGeneralFabDataModals;
+    private final String SAVED_RECYCLER_VIEW_DATASET_ID = "saveDataSet";
     int mScrollPosition;
     boolean fabMovie = false;
+    private MovieData movieData;
+    int choise;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mBundleRecyclerViewState = savedInstanceState;
         setContentView(R.layout.activity_main);
         context = MainActivity.this;
+        movieData = new MovieData();
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_moviecast);
         mErrorMessageDisplay = (TextView) findViewById(R.id.tv_error_message_display);
         layoutManager = new GridLayoutManager(this, 2);
@@ -92,33 +100,61 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         //mRecyclerView.setAdapter(movieAdapter);
         mErrorMessageDisplay = (TextView) findViewById(R.id.tv_error_message_display);
         mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
-        if (mBundleRecyclerViewState != null) {
-            Parcelable listState = mBundleRecyclerViewState.getParcelable(KEY_RECYCLER_STATE);
-            mRecyclerView.getLayoutManager().onRestoreInstanceState(listState);
+        boolean bool = (mBundleRecyclerViewState == null);
+        Log.e("Save Instance", "" + bool);
+        if (mBundleRecyclerViewState == null) {
+            movieData.setMenuOption(0);
+            loadMovieData(mRecyclerView);
+            ; // No saved data, get data from remote
+        } else {
+            restorePreviousState(); // Restore data found in the Bundle
         }
-        loadMovieData(mRecyclerView);
+
 
     }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        Parcelable listState = mRecyclerView.getLayoutManager().onSaveInstanceState();
+        // putting recyclerview position
+        outState.putParcelable(SAVED_RECYCLER_VIEW_STATUS_ID, listState);
+
+        // putting recyclerview items
+        outState.putSerializable(SAVED_RECYCLER_VIEW_DATASET_ID, movieData);
+        super.onSaveInstanceState(outState);
+    }
+
+    public void restorePreviousState() {
+        // getting recyclerview position
+        Parcelable mListState = mBundleRecyclerViewState.getParcelable(SAVED_RECYCLER_VIEW_STATUS_ID);
+        // getting recyclerview items
+        movieData = (MovieData) mBundleRecyclerViewState.getSerializable(SAVED_RECYCLER_VIEW_DATASET_ID);
+        // Restoring adapter items
+        int selectedMenuOptions=movieData.getMenuOption();
+        if (selectedMenuOptions==0||selectedMenuOptions==1){
+            movieAdapter.setMovierURLData(movieData.getPosterURL());
+
+            movieAdapter.setMovieDataJSONArray(movieData.getMovieData());
+            // mAdapter.setItems(mDataset);
+            // Restoring recycler view position
+            //mRecyclerView.getLayoutManager().onRestoreInstanceState(mListState);
+            mRecyclerView.setAdapter(movieAdapter);
+        }else if (selectedMenuOptions==3){
+            movieCursorAdapter.setMovierURLData(movieData.getPosterURL());
+            movieCursorAdapter.setMovieGeneralModals(movieData.getMovieGeneralModals());
+            mRecyclerView.setAdapter(movieCursorAdapter);
+        }
+
+    }
+
 
     @Override
     protected void onPause() {
         super.onPause();
+
+
     }
 
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        if (savedInstanceState != null) {
-            Parcelable savedRecyclerLayoutState = savedInstanceState.getParcelable("key");
-            mRecyclerView.getLayoutManager().onRestoreInstanceState(savedRecyclerLayoutState);
-        }
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelable("key", mRecyclerView.getLayoutManager().onSaveInstanceState());
-    }
 
     @Override
     protected void onResume() {
@@ -157,16 +193,19 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         int itemThatWasClickedId = item.getItemId();
         if (itemThatWasClickedId == R.id.action_most_popular) {
             urlType = 0;
+            movieData.setMenuOption(0);
             movieAdapter.setMovierURLData(null);
             loadMovieData(mRecyclerView);
             return true;
         } else if (itemThatWasClickedId == R.id.action_top_rated) {
             urlType = 1;
+            movieData.setMenuOption(1);
             movieAdapter.setMovierURLData(null);
             loadMovieData(mRecyclerView);
             return true;
         } else if (itemThatWasClickedId == R.id.action_favorite_movie) {
             fabMovie = true;
+            movieData.setMenuOption(3);
             movieAdapter.setMovierURLData(null);
             movieCursorAdapter.setMovierURLData(null);
             loadFavMoviedata(mRecyclerView);
@@ -194,17 +233,17 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     }
 
     @Override
-    public void onClick(JSONObject movieData) {
+    public void onClick(JSONObject object) {
         try {
-            Log.e("Data", movieData.toString());
-            String title = movieData.getString(TITLE);
-            String poster = "" + movieData.getString(MOVIE_POSTER);
-            String release_date = movieData.getString(RELEASE_DATE);
-            String vote = movieData.getString(VOTE_AVERAGE);
-            String plot = movieData.getString(PLOT_SYNOPSIS);
-            String id = movieData.getString(MOVIE_ID);
-            String voteCount = movieData.getString(VOTE_COUNT);
-            String lang = movieData.getString(ORIGINAL_LANG);
+            Log.e("Data", object.toString());
+            String title = object.getString(TITLE);
+            String poster = "" + object.getString(MOVIE_POSTER);
+            String release_date = object.getString(RELEASE_DATE);
+            String vote = object.getString(VOTE_AVERAGE);
+            String plot = object.getString(PLOT_SYNOPSIS);
+            String id = object.getString(MOVIE_ID);
+            String voteCount = object.getString(VOTE_COUNT);
+            String lang = object.getString(ORIGINAL_LANG);
             boolean favMovie = false;
             if (containsFabMovie(movieGeneralFabDataModals, id)) {
                 favMovie = true;
@@ -287,10 +326,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-
-           // notifyDataSetChanged();
-
-
     }
 
     @Override
@@ -372,14 +407,18 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                movieAdapter.setMovierURLData(imgUrl);
-                movieAdapter.setMovieDataJSONArray(movieDetails);
+                movieData.setPosterURL(imgUrl);
+                movieData.setMovieData(movieDetails);
+
+                movieAdapter.setMovierURLData(movieData.getPosterURL());
+                movieAdapter.setMovieDataJSONArray(movieData.getMovieData());
 
             } else {
                 showErrorMessage();
             }
         }
     }
+
 
     public List<MovieGeneralFabDataModal> getAllMovies(Cursor cursor) {
         imgUrl = new String[cursor.getCount()];
@@ -389,9 +428,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             return null;
         }
         int totalData = cursor.getCount();
-        if (totalData==0){
+        if (totalData == 0) {
             if (fabMovie)
-                Toast.makeText(context,getResources().getString(R.string.fab_data_not_avilable),Toast.LENGTH_LONG).show();
+                Toast.makeText(context, getResources().getString(R.string.fab_data_not_avilable), Toast.LENGTH_LONG).show();
         }
         int movieIdIndex = cursor.getColumnIndex(MovieDataContract.TableFavorites.COL_ID);
         int titleIndex = cursor.getColumnIndex(MovieDataContract.TableFavorites.COL_TITLE);
@@ -415,7 +454,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             } while (cursor.moveToNext());
         }
         if (movieList != null) {
-
+            movieData.setPosterURL(imgUrl);
+            movieData.setMovieGeneralModals(movieList);
             movieCursorAdapter.setMovierURLData(imgUrl);
             movieCursorAdapter.setMovieGeneralModals(movieList);
         } else {
